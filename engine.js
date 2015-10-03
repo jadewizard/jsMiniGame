@@ -1,40 +1,73 @@
-window.onload = init;
+//window.onload = init();
 
-var x = 0;
-var y = 0;
-var from = 15;
-var to = 200;
-var startTime = new Date().getTime(); //Текущее время
-var animationTime = 5000; //Длительность анимации
-var img  = new Image();
-img.src = "m.png";
-
-function init ()
+function circle(x,y,r)
 {
-    field = document.getElementById("field");
-    context = field.getContext("2d");
-    context.fillStyle = "#000";
+    this.x = x;
+    this.y = y;
+    this.r = r;
+
+    this.draw = function(color, globalAlpha)
+    {
+        context.globalAlpha = globalAlpha;
+        context.fillStyle = color;
+        context.beginPath();
+        context.arc(this.x, this.y, this.r, 0, Math.PI * 2, true);
+        context.fill();
+    }
 }
 
-timer = setInterval(function()
+function rect(x, y, width, height)
 {
-    nowTime = new Date().getTime() - startTime;
-    aProgerss = nowTime / animationTime;
-    result = (to - from) * Math.sin(aProgerss) + from;
+    this.x = x;
+    this.y = y;
+    this.w = width;
+    this.h = height;
 
-    drawElement(result);
-
-},800);
-
-function drawElement (x)
-{
-    clear();
-    //x = Math.round((Math.random() * (240-50)));
-    y = Math.round((Math.random() * (400-50)));
-    context.drawImage(img, x, y);
+    this.draw = function (color, globalAlpha)
+    {
+        context.globalAlpha = globalAlpha;
+        context.fillStyle = color;
+        context.fillRect(this.x, this.y, this.w, this.h);
+    }
 }
 
-function clear ()
+function update()
 {
-    context.clearRect(0,0,240,400);
+    if (ball.y - ball.r < 0 || ball.y + ball.r > 320)
+    {
+        speedY = -speedY;
+    }
+
+    if (ball.x - ball.r < 0 || ball.x + ball.r > 480)
+    {
+        speedX = -speedX;
+    }
+
+    ball.x += speedX;
+    ball.y += speedY;
+}
+
+function draw()
+{
+    field.draw("#000", 0.1);
+    ball.draw("#F00", 1);
+    update();
+}
+
+function init()
+{
+    //Отрисовываем круг и поле
+    field = new rect(0,0,600,600);
+    ball  = new circle(field.width / 2, field.height / 2, 24);
+
+    //Задаём скорость
+    speedX = 5;
+    speedY = 5;
+
+    //Задаём параметры
+    var canvas = document.getElementById('field');
+    canvas.width = 600;
+    canvas.height = 600;
+    context = canvas.getContext("2d");
+    setInterval(draw,1000 / 50);
 }
