@@ -57,17 +57,17 @@ function draw()
 function init()
 {
     //Отрисовываем круг и поле
-    field = new rect(0,0,600,600);
-    ball  = new circle(field.width / 2, field.height / 2, 24);
+    field = new rect(0,0,480,320);
+    ball  = new circle(field.w / 2, field.w / 2, 24);
 
     //Задаём скорость
     speedX = 5;
     speedY = 5;
 
     //Задаём параметры
-    var canvas = document.getElementById('field');
-    canvas.width = 600;
-    canvas.height = 600;
+    canvas = document.getElementById('field');
+    canvas.width = 480;
+    canvas.height = 320;
     context = canvas.getContext("2d");
     setInterval(draw,1000 / 50);
 }
