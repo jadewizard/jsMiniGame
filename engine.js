@@ -1,42 +1,40 @@
 window.onload = init;
 
-var map;
-var ctxMap;
-var drawBtn;
-var clearBtn;
-var gameMapWidth = 240;
-var gameMapHeight = 400;
-var startData = Date.Now;
+var x = 0;
+var y = 0;
+var from = 15;
+var to = 200;
+var startTime = new Date().getTime(); //Текущее время
+var animationTime = 5000; //Длительность анимации
+var img  = new Image();
+img.src = "m.png";
 
-function init()
+function init ()
 {
-    map = document.getElementById('map');
-    map.width = gameMapWidth;
-    map.height = gameMapHeight;
-    ctxBg = map.getContext("2d");
+    field = document.getElementById("field");
+    context = field.getContext("2d");
+    context.fillStyle = "#000";
 }
 
-var time = setInterval(function()
+timer = setInterval(function()
 {
-    var timePassed = Date.Now - startData;
-    if (timePassed >= 2000)
-    {
-        clearInterval(time);
-    }
+    nowTime = new Date().getTime() - startTime;
+    aProgerss = nowTime / animationTime;
+    result = (to - from) * Math.sin(aProgerss) + from;
 
-    x = Math.round((Math.random() * (1440 - 12)));
-    y = Math.round((Math.random() * (1440 - 12)));
-    drawObject(x,y);
-})
+    drawElement(result);
 
-function drawObject(x,y)
+},800);
+
+function drawElement (x)
 {
     clear();
-    ctxBg.fillStyle = "#000"
-    ctxBg.fillRect(x,y,20,20);
+    //x = Math.round((Math.random() * (240-50)));
+    y = Math.round((Math.random() * (400-50)));
+    context.drawImage(img, x, y);
 }
 
-function clear()
+function clear ()
 {
-    ctxBg.clearRect(0,0,240,400);
+    context.clearRect(0,0,240,400);
 }
